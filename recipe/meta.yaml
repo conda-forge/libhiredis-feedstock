@@ -1,5 +1,5 @@
 {% set name = "libhiredis" %}
-{% set version = "1.0.2" %}
+{% set version = "1.1.0" %}
 {% set soversion = "1.0.0" %}
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   url: https://github.com/redis/hiredis/archive/v{{ version }}.tar.gz
-  sha256: e0ab696e2f07deb4252dda45b703d09854e53b9703c7d52182ce5a22616c3819
+  sha256: fe6d21741ec7f3fc9df409d921f47dfc73a4d8ff64f4ac6f1d95f951bf7f53d6
   patches:
     - hiredis-1.0.0-disable-network-tests.patch
 
