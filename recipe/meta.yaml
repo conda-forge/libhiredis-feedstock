@@ -13,7 +13,7 @@ source:
     - hiredis-1.0.0-disable-network-tests.patch
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win and float(vc) < 14]
   run_exports:
     - {{ pin_subpackage('libhiredis', max_pin='x.x') }}
@@ -21,6 +21,7 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
+    - {{ stdlib("c") }}
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}  # [not win]
     - cmake
