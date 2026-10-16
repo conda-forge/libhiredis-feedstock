@@ -1,0 +1,58 @@
+schema_version: 1
+
+context:
+  name: libhiredis
+  version: "1.3.0"
+  soversion: "1.3.0"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/redis/hiredis/archive/v${{ version }}.tar.gz
+  sha256: 25cee4500f359cf5cad3b51ed62059aadfc0939b05150c1f19c7e2829123631c
+  patches:
+    - hiredis-1.1.0-disable-network-tests.patch
+
+build:
+  number: 2
+  skip: win and int(float(vc)) < 14
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib("c") }}
+    - ${{ compiler('cxx') }}
+    - cmake
+    - if: unix
+      then: make
+  host:
+    - if: win and int(float(vc)) < 14
+      then: msinttypes
+  run_exports:
+    - ${{ pin_subpackage('libhiredis', upper_bound='x.x') }}
+
+tests:
+  - script:
+      - if: linux
+        then: ldd ${PREFIX}/lib/libhiredis.so
+      - if: unix
+        then: test -f ${PREFIX}/include/hiredis/hiredis.h
+      - if: osx
+        then: test -f ${PREFIX}/lib/libhiredis.${{ soversion }}${SHLIB_EXT}
+      - if: win
+        then: if not exist %PREFIX%\\Library\\include\\hiredis\\hiredis.h exit 1
+      - echo "TODO - Pkg tests require redis server."
+
+about:
+  license: BSD-3-Clause
+  license_file: COPYING
+  summary: Minimalistic C client for Redis >= 1.2
+  homepage: http://github.com/redis/hiredis
+  repository: https://github.com/redis/hiredis
+
+extra:
+  recipe-maintainers:
+    - apmorton
+    - sarnold
