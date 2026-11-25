@@ -4,9 +4,10 @@ conda_forge_output_validation: true
 provider:
   linux_aarch64: default
   linux_ppc64le: default
+  win_arm64: default
 github:
   branch_name: main
   tooling_branch_name: main
-conda_build:
-  pkg_format: '2'
+conda_build_tool: rattler-build
+conda_install_tool: pixi
 test: native_and_emulated

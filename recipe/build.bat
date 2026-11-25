@@ -7,7 +7,7 @@ env
 REM add future installation path to pkgconfig
 set PKG_CONFIG_PATH=%LIBRARY_PREFIX%\lib\pkgconfig;
 
-cmake -G"NMake Makefiles" ^
+cmake %CMAKE_ARGS% -G"NMake Makefiles" ^
       -DCMAKE_BUILD_TYPE=Release ^
       -DDISABLE_TESTS:BOOL=ON ^
       -DCMAKE_INSTALL_PREFIX:PATH=%LIBRARY_PREFIX% ^

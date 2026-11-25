@@ -1,0 +1,65 @@
+schema_version: 1
+
+context:
+  version: "1.5.0"
+
+package:
+  name: libhiredis
+  version: ${{ version }}
+
+source:
+  url: https://github.com/redis/hiredis/archive/v${{ version }}.tar.gz
+  sha256: eec7ef8641d221e144a58d5ef8d733c8c75c7fd487097a233aacb4fa33981cfb
+  patches:
+    - hiredis-1.1.0-disable-network-tests.patch
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - cmake
+    - if: unix
+      then: make
+  run_exports:
+    - ${{ pin_subpackage('libhiredis', upper_bound='x.x') }}
+
+tests:
+  - package_contents:
+      include:
+        - hiredis/hiredis.h
+      lib:
+        - hiredis
+      files:
+        - if: osx
+          then: lib/libhiredis.${{ version }}.dylib
+        - if: win
+          then: Library/bin/hiredis.dll
+  - files:
+      recipe:
+        - cmake_test/
+    requirements:
+      run:
+        - ${{ compiler('c') }}
+        - ${{ stdlib('c') }}
+        - cmake
+        - ninja
+    script:
+      - cmake -S cmake_test -B build -G Ninja
+      - cmake --build build
+      - ctest --test-dir build --output-on-failure
+
+about:
+  homepage: https://github.com/redis/hiredis
+  license: BSD-3-Clause
+  license_file: COPYING
+  summary: Minimalistic C client for Redis >= 1.2
+  repository: https://github.com/redis/hiredis
+
+extra:
+  recipe-maintainers:
+    - apmorton
+    - sarnold
+    - wolfv

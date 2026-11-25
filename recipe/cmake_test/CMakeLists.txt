@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.15)
+project(hiredis_smoke_test LANGUAGES C)
+find_package(hiredis CONFIG REQUIRED)
+add_executable(hiredis_smoke_test main.c)
+target_link_libraries(hiredis_smoke_test PRIVATE hiredis::hiredis)
+enable_testing()
+add_test(NAME hiredis_smoke_test COMMAND hiredis_smoke_test)
